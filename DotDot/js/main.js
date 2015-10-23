@@ -1,11 +1,14 @@
 var game;
+
 $(function() {
-	var deviceWidth = document.body.clientWidth;
-	var deviceHeight = document.body.clientHeight;
+	var deviceWidth = window.screen.width;
+	var deviceHeight = window.screen.height-20;
 	
 	var container = d3.select("svg#container").attr("width", deviceWidth).attr(
-			"height", deviceHeight*0.9);
-	d3.select("#replay").attr("x",deviceWidth/2).attr("y",deviceHeight/2).attr("text-anchor","middle").style("display","none");
+			"height", deviceHeight);
+
+	
+	d3.select("#replay").attr("x",deviceWidth/2).attr("y",(deviceHeight)/2).attr("text-anchor","middle").style("display","none");
 	
 	game = new Game(container, deviceWidth, deviceHeight);
 	
@@ -28,7 +31,7 @@ $(function() {
 });
 
 window.addEventListener("touchstart", function(event) {
-	//event.preventDefault();
+	event.preventDefault();
 }, false);
 
 window.addEventListener("touchmove", function(event) {
@@ -40,6 +43,12 @@ window.addEventListener("touchmove", function(event) {
 		x : touch.pageX,
 		y : touch.pageY
 	};
+	
+	if(pos.x <= 0) pos.x = 0;
+	if(pos.x >= window.screen.width) pos.x = window.screen.width;
+	if(pos.y <= 0) pos.y = 0;
+	if(pos.y >= window.screen.height-50) pos.y = window.screen.height-50;
+	
 	game.hero.touchMove(pos);
 }, false);
 
@@ -48,15 +57,21 @@ window.addEventListener("mousemove", function(event){
 			x:event.screenX,
 			y:event.screenY
 	};
+	if(pos.x <= 0) pos.x = 0;
+	if(pos.x >= window.screen.width) pos.x = window.screen.width;
+	if(pos.y <= 0) pos.y = 0;
+	if(pos.y >= window.screen.height-50) pos.y = window.screen.height-50;
 	game.hero.touchMove(pos);
 }, false);
 
-window.addEventListener('tizenhwkey', function onTizenHwKey(e) {
-    if (e.keyName === 'back') {
-        try {
-            tizen.application.getCurrentApplication().exit();
-        } catch (err) {
-            console.log('Error: ', err);
-        }
-    }
-});
+
+window.addEventListener('tizenhwkey', function(e) {
+	if(e.keyName == "back") {
+		try {
+			tizen.application.getCurrentApplication().exit();
+		} catch (error) {
+			console.error("getCurrentApplication(): " + error.message);
+		}
+	}
+},false);
+

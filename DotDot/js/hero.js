@@ -1,12 +1,12 @@
 function Hero(x,y){
-	this.HREO_MIN_R = 2;
+	this.HREO_MIN_R = 5;
     this.x = x;
     this.y = y;
     this.life = 1;
-    this.r = 5;
+    this.r = 10;
     this.magics = new Array();
     this.noEnemy = false;
-    this.color = "#666666";
+    this.color = "blue";
     this.touch = true;
 
     this.display = function(container){
